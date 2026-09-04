@@ -540,4 +540,625 @@ export default function Home() {
                 <p className="mt-2 text-slate-500">$ status</p>
                 <p className="text-emerald-400">
                   learning · building · shipping
-                  <span className="ml-1 inline-block 
+                  <span className="ml-1 inline-block h-4 w-1 animate-pulse bg-emerald-400 align-middle" />
+                </p>
+              </div>
+            </div>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* =========================================================
+          ABOUT
+          ========================================================= */}
+      <section id="about" className="bg-white py-24 sm:py-28">
+        <div className="mx-auto max-w-7xl px-5 sm:px-8 lg:px-10">
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.2 }}
+            variants={fadeUp}
+            className="grid gap-12 lg:grid-cols-[0.75fr_1.25fr]"
+          >
+            <div>
+              <p className="text-[10px] font-black tracking-[0.25em] text-blue-600">
+                01 · ABOUT
+              </p>
+
+              <h2 className="mt-5 text-4xl font-black tracking-[-0.04em] sm:text-5xl">
+                Building the
+                <br />
+                foundation.
+              </h2>
+
+              <p className="mt-5 max-w-sm text-sm leading-7 text-slate-500">
+                A practical DevOps and cloud engineering journey focused on
+                understanding how systems are built, deployed, observed and
+                improved.
+              </p>
+            </div>
+
+            <div className="grid gap-5 lg:grid-cols-2">
+              <div className="rounded-3xl border border-slate-200 bg-slate-950 p-7 text-white shadow-xl">
+                <div className="mb-6 flex items-center gap-2">
+                  <span className="h-2.5 w-2.5 rounded-full bg-red-400" />
+                  <span className="h-2.5 w-2.5 rounded-full bg-yellow-400" />
+                  <span className="h-2.5 w-2.5 rounded-full bg-emerald-400" />
+                </div>
+
+                <p className="font-mono text-xs leading-7 text-slate-400">
+                  $ cat profile.txt
+                </p>
+
+                <p className="mt-4 text-sm leading-7 text-slate-300">
+                  Computer Science graduate building a career in DevOps,
+                  Cloud and Platform Engineering, with a growing focus on
+                  MLOps and AI infrastructure.
+                </p>
+
+                <p className="mt-4 text-sm leading-7 text-slate-300">
+                  I learn by building practical systems and documenting the
+                  engineering decisions behind them.
+                </p>
+              </div>
+
+              <div className="rounded-3xl border border-slate-200 bg-slate-50 p-7">
+                <p className="text-[10px] font-black tracking-[0.2em] text-slate-400">
+                  CURRENT FOCUS
+                </p>
+
+                <div className="mt-5 space-y-4">
+                  {[
+                    "DevOps & Cloud",
+                    "Containers & Kubernetes",
+                    "Infrastructure Automation",
+                    "Observability & Reliability",
+                    "AI / ML Infrastructure",
+                  ].map((item) => (
+                    <div
+                      key={item}
+                      className="flex items-center gap-3 text-sm font-bold text-slate-700"
+                    >
+                      <span className="h-2 w-2 rounded-full bg-blue-600" />
+                      {item}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* =========================================================
+          ENGINEERING MINDSET
+          ========================================================= */}
+      <section className="border-y border-slate-200 bg-[#f5f7fb] py-24 sm:py-28">
+        <div className="mx-auto max-w-7xl px-5 sm:px-8 lg:px-10">
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.2 }}
+            variants={fadeUp}
+          >
+            <p className="text-[10px] font-black tracking-[0.25em] text-blue-600">
+              ENGINEERING MINDSET
+            </p>
+
+            <div className="mt-5 grid gap-10 lg:grid-cols-[0.8fr_1.2fr]">
+              <h2 className="text-4xl font-black tracking-[-0.04em] sm:text-5xl">
+                Build.
+                <br />
+                Automate.
+                <br />
+                Observe.
+              </h2>
+
+              <div className="grid gap-px overflow-hidden rounded-3xl border border-slate-200 bg-slate-200 sm:grid-cols-2">
+                {principles.map((item) => (
+                  <div
+                    key={item.number}
+                    className="bg-white p-7 transition hover:bg-slate-50"
+                  >
+                    <p className="text-[10px] font-black tracking-[0.2em] text-blue-600">
+                      {item.number}
+                    </p>
+
+                    <h3 className="mt-4 text-lg font-black">{item.title}</h3>
+
+                    <p className="mt-3 text-sm leading-6 text-slate-500">
+                      {item.text}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* =========================================================
+          EXPERIENCE
+          ========================================================= */}
+      <section id="experience" className="bg-white py-24 sm:py-28">
+        <div className="mx-auto max-w-7xl px-5 sm:px-8 lg:px-10">
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.15 }}
+            variants={fadeUp}
+          >
+            <p className="text-[10px] font-black tracking-[0.25em] text-blue-600">
+              02 · EXPERIENCE
+            </p>
+
+            <h2 className="mt-5 max-w-3xl text-4xl font-black tracking-[-0.04em] sm:text-5xl">
+              From learning environments
+              <br className="hidden sm:block" />
+              to engineering practice.
+            </h2>
+
+            <div className="mt-14">
+              {experiences.map((experience, index) => (
+                <div
+                  key={`${experience.company}-${experience.period}`}
+                  className="relative grid gap-6 border-t border-slate-200 py-10 lg:grid-cols-[220px_1fr]"
+                >
+                  <div>
+                    <p className="text-[10px] font-black tracking-[0.15em] text-slate-400">
+                      {experience.period}
+                    </p>
+                    <p className="mt-2 text-sm font-black text-blue-600">
+                      {experience.company}
+                    </p>
+                  </div>
+
+                  <div className="relative">
+                    <span className="absolute -left-[31px] top-1 hidden h-3 w-3 rounded-full border-2 border-white bg-blue-600 shadow lg:block" />
+
+                    <h3 className="text-2xl font-black tracking-tight">
+                      {experience.role}
+                    </h3>
+
+                    <p className="mt-3 max-w-3xl text-sm leading-7 text-slate-500">
+                      {experience.description}
+                    </p>
+
+                    <ul className="mt-5 space-y-3">
+                      {experience.points.map((point) => (
+                        <li
+                          key={point}
+                          className="flex gap-3 text-sm leading-6 text-slate-600"
+                        >
+                          <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-blue-600" />
+                          {point}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+
+                  {index < experiences.length - 1 && (
+                    <div className="absolute bottom-0 left-[220px] hidden h-full w-px bg-slate-100 lg:block" />
+                  )}
+                </div>
+              ))}
+            </div>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* =========================================================
+          WORK
+          ========================================================= */}
+      <section id="work" className="bg-slate-950 py-24 text-white sm:py-28">
+        <div className="mx-auto max-w-7xl px-5 sm:px-8 lg:px-10">
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.15 }}
+            variants={fadeUp}
+          >
+            <div className="flex flex-col justify-between gap-6 sm:flex-row sm:items-end">
+              <div>
+                <p className="text-[10px] font-black tracking-[0.25em] text-blue-400">
+                  03 · FEATURED WORK
+                </p>
+
+                <h2 className="mt-5 text-4xl font-black tracking-[-0.04em] sm:text-5xl">
+                  Systems I&apos;ve built.
+                </h2>
+              </div>
+
+              <a
+                href="https://github.com/rahman5828"
+                target="_blank"
+                rel="noreferrer"
+                className="text-[10px] font-black tracking-[0.18em] text-slate-400 transition hover:text-white"
+              >
+                VIEW GITHUB ↗
+              </a>
+            </div>
+
+            <div className="mt-14 grid gap-5 md:grid-cols-2">
+              {projects.map((project, index) => (
+                <article
+                  key={project.title}
+                  className={`group relative overflow-hidden rounded-3xl border border-slate-800 bg-slate-900 p-7 transition duration-300 hover:-translate-y-1 hover:border-slate-600 ${
+                    index === 0 ? "md:col-span-2" : ""
+                  }`}
+                >
+                  <div className="absolute right-0 top-0 h-40 w-40 rounded-full bg-blue-600/10 blur-3xl transition group-hover:bg-blue-600/20" />
+
+                  <div className="relative">
+                    <div className="flex flex-wrap items-center justify-between gap-3">
+                      <span className="text-[9px] font-black tracking-[0.2em] text-blue-400">
+                        {project.category}
+                      </span>
+
+                      <span className="rounded-full border border-slate-700 px-3 py-1.5 text-[8px] font-black tracking-[0.14em] text-slate-400">
+                        {project.status}
+                      </span>
+                    </div>
+
+                    <h3 className="mt-7 text-2xl font-black tracking-tight sm:text-3xl">
+                      {project.title}
+                    </h3>
+
+                    <p className="mt-4 max-w-3xl text-sm leading-7 text-slate-400">
+                      {project.description}
+                    </p>
+
+                    <div className="mt-7 flex flex-wrap gap-2">
+                      {project.stack.map((technology) => (
+                        <span
+                          key={technology}
+                          className="rounded-full border border-slate-800 bg-slate-950 px-3 py-2 text-[9px] font-bold text-slate-400"
+                        >
+                          {technology}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                </article>
+              ))}
+            </div>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* =========================================================
+          IMPACT
+          ========================================================= */}
+      <section className="border-b border-slate-200 bg-white py-24 sm:py-28">
+        <div className="mx-auto max-w-7xl px-5 sm:px-8 lg:px-10">
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.2 }}
+            variants={fadeUp}
+            className="grid gap-10 lg:grid-cols-[0.8fr_1.2fr]"
+          >
+            <div>
+              <p className="text-[10px] font-black tracking-[0.25em] text-blue-600">
+                ENGINEERING IMPACT
+              </p>
+
+              <h2 className="mt-5 text-4xl font-black tracking-[-0.04em] sm:text-5xl">
+                Make infrastructure
+                <br />
+                simpler.
+              </h2>
+            </div>
+
+            <div className="rounded-3xl border border-slate-200 bg-slate-50 p-8 sm:p-10">
+              <p className="text-[10px] font-black tracking-[0.2em] text-slate-400">
+                DOCUMENTED OUTCOME
+              </p>
+
+              <div className="mt-5 flex flex-wrap items-end gap-4">
+                <span className="text-6xl font-black tracking-[-0.06em] text-blue-600 sm:text-8xl">
+                  85%+
+                </span>
+
+                <span className="mb-2 max-w-[180px] text-sm font-bold leading-5 text-slate-500">
+                  infrastructure resource reduction through environment
+                  optimization.
+                </span>
+              </div>
+
+              <p className="mt-7 max-w-2xl text-sm leading-7 text-slate-500">
+                The work involved optimizing a roughly 35-container local
+                environment and moving suitable responsibilities toward a
+                more efficient architecture and managed services.
+              </p>
+            </div>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* =========================================================
+          SKILLS
+          ========================================================= */}
+      <section id="skills" className="bg-[#f5f7fb] py-24 sm:py-28">
+        <div className="mx-auto max-w-7xl px-5 sm:px-8 lg:px-10">
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.15 }}
+            variants={fadeUp}
+          >
+            <p className="text-[10px] font-black tracking-[0.25em] text-blue-600">
+              04 · TECHNICAL STACK
+            </p>
+
+            <h2 className="mt-5 text-4xl font-black tracking-[-0.04em] sm:text-5xl">
+              Tools are useful.
+              <br />
+              Capabilities matter more.
+            </h2>
+
+            <div className="mt-14 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+              {skillGroups.map((group) => (
+                <div
+                  key={group.title}
+                  className="rounded-3xl border border-slate-200 bg-white p-7 transition hover:-translate-y-1 hover:shadow-xl"
+                >
+                  <h3 className="text-lg font-black">{group.title}</h3>
+
+                  <div className="mt-6 flex flex-wrap gap-2">
+                    {group.items.map((item) => (
+                      <span
+                        key={item}
+                        className="rounded-full bg-slate-100 px-3 py-2 text-[9px] font-bold text-slate-600"
+                      >
+                        {item}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* =========================================================
+          DIRECTION
+          ========================================================= */}
+      <section className="bg-white py-24 sm:py-28">
+        <div className="mx-auto max-w-7xl px-5 sm:px-8 lg:px-10">
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.2 }}
+            variants={fadeUp}
+            className="rounded-[32px] border border-slate-200 bg-slate-950 p-8 text-white sm:p-12 lg:p-16"
+          >
+            <p className="text-[10px] font-black tracking-[0.25em] text-blue-400">
+              LONG-TERM DIRECTION
+            </p>
+
+            <div className="mt-7 grid gap-10 lg:grid-cols-[1fr_0.7fr]">
+              <div>
+                <h2 className="max-w-3xl text-4xl font-black tracking-[-0.04em] sm:text-6xl">
+                  DEVOPS
+                  <span className="text-slate-600"> → </span>
+                  CLOUD
+                  <span className="text-slate-600"> → </span>
+                  AI INFRASTRUCTURE
+                </h2>
+
+                <p className="mt-7 max-w-2xl text-sm leading-7 text-slate-400">
+                  Building the foundation to work on reliable platforms that
+                  make modern applications and AI/ML workloads easier to
+                  deploy, monitor, secure and scale.
+                </p>
+              </div>
+
+              <div className="rounded-3xl border border-slate-800 bg-slate-900 p-7">
+                <p className="font-mono text-xs text-slate-500">$ roadmap</p>
+
+                <div className="mt-5 space-y-4">
+                  {[
+                    "DevOps / Cloud",
+                    "Platform Engineering",
+                    "MLOps",
+                    "AI Infrastructure",
+                  ].map((item, index) => (
+                    <div
+                      key={item}
+                      className="flex items-center gap-3 text-sm font-bold"
+                    >
+                      <span className="font-mono text-xs text-blue-400">
+                        0{index + 1}
+                      </span>
+                      <span>{item}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* =========================================================
+          EDUCATION
+          ========================================================= */}
+      <section className="border-y border-slate-200 bg-[#f5f7fb] py-24 sm:py-28">
+        <div className="mx-auto max-w-7xl px-5 sm:px-8 lg:px-10">
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.2 }}
+            variants={fadeUp}
+          >
+            <p className="text-[10px] font-black tracking-[0.25em] text-blue-600">
+              05 · EDUCATION & CERTIFICATIONS
+            </p>
+
+            <div className="mt-10 grid gap-5 lg:grid-cols-2">
+              <div className="rounded-3xl border border-slate-200 bg-white p-8">
+                <p className="text-[10px] font-black tracking-[0.18em] text-slate-400">
+                  EDUCATION
+                </p>
+
+                <h3 className="mt-5 text-2xl font-black">
+                  B.E. Computer Science and Engineering
+                </h3>
+
+                <p className="mt-3 text-sm font-bold text-blue-600">
+                  Mother Teresa College of Engineering and Technology
+                </p>
+
+                <div className="mt-5 flex flex-wrap gap-2 text-xs font-bold text-slate-500">
+                  <span className="rounded-full bg-slate-100 px-3 py-2">
+                    2021 – 2025
+                  </span>
+                  <span className="rounded-full bg-slate-100 px-3 py-2">
+                    CGPA 7.6
+                  </span>
+                  <span className="rounded-full bg-slate-100 px-3 py-2">
+                    First Class
+                  </span>
+                </div>
+              </div>
+
+              <div className="rounded-3xl border border-slate-200 bg-white p-8">
+                <p className="text-[10px] font-black tracking-[0.18em] text-slate-400">
+                  CERTIFICATIONS
+                </p>
+
+                <div className="mt-5 space-y-5">
+                  <div>
+                    <h3 className="font-black">
+                      AWS Cloud Practitioner — AWS Cloud Quest
+                    </h3>
+                  </div>
+
+                  <div>
+                    <h3 className="font-black">
+                      Linux Essentials — Besant Technologies
+                    </h3>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* =========================================================
+          GITHUB
+          ========================================================= */}
+      <section className="bg-white py-24 sm:py-28">
+        <div className="mx-auto max-w-7xl px-5 sm:px-8 lg:px-10">
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.2 }}
+            variants={fadeUp}
+            className="rounded-3xl border border-slate-200 bg-slate-50 p-8 sm:p-10"
+          >
+            <div className="flex flex-col justify-between gap-8 sm:flex-row sm:items-end">
+              <div>
+                <p className="text-[10px] font-black tracking-[0.25em] text-blue-600">
+                  GITHUB
+                </p>
+
+                <h2 className="mt-4 text-3xl font-black tracking-tight sm:text-4xl">
+                  Build it. Commit it. Show the evidence.
+                </h2>
+
+                <p className="mt-4 max-w-2xl text-sm leading-7 text-slate-500">
+                  Source code, experiments and engineering work are available
+                  publicly on GitHub.
+                </p>
+              </div>
+
+              <a
+                href="https://github.com/rahman5828"
+                target="_blank"
+                rel="noreferrer"
+                className="shrink-0 rounded-full bg-slate-950 px-6 py-4 text-[10px] font-black tracking-[0.15em] text-white transition hover:bg-blue-600"
+              >
+                github.com/rahman5828 ↗
+              </a>
+            </div>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* =========================================================
+          CONTACT
+          ========================================================= */}
+      <section
+        id="contact"
+        className="bg-slate-950 py-24 text-white sm:py-28"
+      >
+        <div className="mx-auto max-w-7xl px-5 sm:px-8 lg:px-10">
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.2 }}
+            variants={fadeUp}
+            className="grid gap-10 lg:grid-cols-[1fr_0.7fr]"
+          >
+            <div>
+              <p className="text-[10px] font-black tracking-[0.25em] text-blue-400">
+                06 · CONTACT
+              </p>
+
+              <h2 className="mt-5 max-w-3xl text-5xl font-black tracking-[-0.05em] sm:text-7xl">
+                Let&apos;s build
+                <br />
+                something reliable.
+              </h2>
+
+              <p className="mt-7 max-w-xl text-sm leading-7 text-slate-400">
+                I&apos;m open to entry-level DevOps, Cloud, Platform
+                Engineering and relevant MLOps / AI infrastructure
+                opportunities.
+              </p>
+            </div>
+
+            <div className="flex flex-col justify-end gap-3">
+              <a
+                href="mailto:abdulrahman6148@gmail.com"
+                className="rounded-2xl border border-slate-800 bg-slate-900 px-6 py-5 text-sm font-bold transition hover:border-slate-600"
+              >
+                abdulrahman6148@gmail.com
+              </a>
+
+              <a
+                href="https://www.linkedin.com/in/rahman-devops/"
+                target="_blank"
+                rel="noreferrer"
+                className="rounded-2xl border border-slate-800 bg-slate-900 px-6 py-5 text-sm font-bold transition hover:border-slate-600"
+              >
+                LinkedIn ↗
+              </a>
+
+              <a
+                href="https://github.com/rahman5828"
+                target="_blank"
+                rel="noreferrer"
+                className="rounded-2xl border border-slate-800 bg-slate-900 px-6 py-5 text-sm font-bold transition hover:border-slate-600"
+              >
+                GitHub ↗
+              </a>
+            </div>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* Footer */}
+      <footer className="border-t border-slate-800 bg-slate-950 px-5 py-8 text-slate-500">
+        <div className="mx-auto flex max-w-7xl flex-col justify-between gap-3 text-[9px] font-black tracking-[0.18em] sm:flex-row">
+          <span>ABDUL RAHMAN · DEVOPS · CLOUD · AI INFRASTRUCTURE</span>
+          <span>BUILD · AUTOMATE · OBSERVE · IMPROVE</span>
+        </div>
+      </footer>
+    </main>
+  );
+}
