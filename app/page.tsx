@@ -252,13 +252,11 @@ export default function Home() {
 
   return (
     <main className="min-h-screen overflow-x-hidden bg-[#f8f9fc] text-slate-950">
-      {/* Scroll progress */}
       <div
         className="fixed left-0 top-0 z-[100] h-[3px] bg-blue-600 transition-[width] duration-150"
         style={{ width: `${scrollProgress}%` }}
       />
 
-      {/* Navigation */}
       <header className="sticky top-0 z-50 border-b border-slate-200/80 bg-white/90 backdrop-blur-xl">
         <div className="mx-auto flex h-[76px] max-w-7xl items-center justify-between px-5 sm:px-8 lg:px-10">
           <a href="#home" className="flex items-center gap-3" onClick={closeMenu}>
@@ -306,7 +304,9 @@ export default function Home() {
             onClick={() => setMenuOpen((value) => !value)}
             className="flex h-12 w-12 items-center justify-center rounded-xl border border-slate-200 bg-white lg:hidden"
           >
-            <span className="text-2xl leading-none">{menuOpen ? "×" : "☰"}</span>
+            <span className="text-2xl leading-none">
+              {menuOpen ? "×" : "☰"}
+            </span>
           </button>
         </div>
 
@@ -335,14 +335,11 @@ export default function Home() {
         )}
       </header>
 
-      {/* =========================================================
-          HERO
-          ========================================================= */}
+      {/* HERO */}
       <section
         id="home"
         className="relative overflow-hidden border-b border-slate-200 bg-white"
       >
-        {/* Technical grid */}
         <div
           className="pointer-events-none absolute inset-0 opacity-70"
           style={{
@@ -355,7 +352,6 @@ export default function Home() {
         <div className="pointer-events-none absolute left-1/2 top-20 h-96 w-96 -translate-x-1/2 rounded-full bg-blue-100/40 blur-3xl" />
 
         <div className="relative mx-auto grid max-w-7xl items-center gap-8 px-5 py-14 sm:px-8 sm:py-20 lg:grid-cols-[0.9fr_1.1fr] lg:gap-12 lg:px-10 lg:py-24">
-          {/* Hero copy */}
           <motion.div
             initial="hidden"
             animate="visible"
@@ -435,30 +431,20 @@ export default function Home() {
             </div>
           </motion.div>
 
-          {/* =====================================================
-              HERO VISUAL
-              MOBILE FIX:
-              - Photo is always given its own visible area.
-              - Terminal no longer covers the portrait.
-              - Popups stay around the photo.
-              - Desktop arrangement remains essentially unchanged.
-              ===================================================== */}
+          {/* HERO VISUAL */}
           <motion.div
             initial="hidden"
             animate="visible"
             variants={fadeIn}
             className="relative z-10 mt-4 h-[560px] w-full sm:h-[620px] lg:mt-0 lg:h-[650px]"
           >
-            {/* Outer technical ring */}
+            {/* Outer ring */}
             <div className="absolute left-1/2 top-[7%] h-[330px] w-[330px] -translate-x-1/2 rounded-full border border-dashed border-blue-200 sm:h-[410px] sm:w-[410px] lg:top-[8%] lg:h-[500px] lg:w-[500px]" />
 
             {/* Inner ring */}
             <div className="absolute left-1/2 top-[13%] h-[270px] w-[270px] -translate-x-1/2 rounded-full border border-slate-200 bg-white/50 shadow-[0_30px_80px_rgba(15,23,42,0.08)] sm:h-[350px] sm:w-[350px] lg:top-[14%] lg:h-[420px] lg:w-[420px]" />
 
-            {/* =================================================
-                PHOTO
-                IMPORTANT: high z-index and separate positioning
-                ================================================= */}
+            {/* PHOTO */}
             <div className="absolute left-1/2 top-[17%] z-20 h-[220px] w-[220px] -translate-x-1/2 overflow-hidden rounded-full border-[10px] border-white bg-slate-100 shadow-[0_25px_70px_rgba(15,23,42,0.16)] sm:top-[18%] sm:h-[290px] sm:w-[290px] lg:top-[18%] lg:h-[350px] lg:w-[350px]">
               <Image
                 src="/profile.png"
@@ -480,6 +466,7 @@ export default function Home() {
               <p className="text-[8px] font-black tracking-[0.22em] text-slate-400 sm:text-[9px]">
                 INFRASTRUCTURE
               </p>
+
               <p className="mt-2 text-xs font-black text-slate-700 sm:text-sm">
                 Build
                 <span className="mx-2 text-slate-300">→</span>
@@ -497,12 +484,13 @@ export default function Home() {
               <p className="text-[8px] font-black tracking-[0.22em] text-blue-500 sm:text-[9px]">
                 CLOUD
               </p>
+
               <p className="mt-2 text-xs font-black text-blue-700 sm:text-sm">
                 AWS · Kubernetes
               </p>
             </motion.div>
 
-            {/* Small technology markers */}
+            {/* Technology markers */}
             <div className="absolute bottom-[20%] left-[19%] z-20 hidden h-11 w-11 items-center justify-center rounded-xl border border-blue-100 bg-white text-[9px] font-black text-blue-600 shadow-md sm:flex lg:bottom-[20%]">
               K8S
             </div>
@@ -511,11 +499,7 @@ export default function Home() {
               AWS
             </div>
 
-            {/* =================================================
-                TERMINAL
-                Mobile: lower on the visual so it cannot cover photo
-                Desktop: same foreground effect
-                ================================================= */}
+            {/* Terminal */}
             <div className="absolute bottom-[1%] left-1/2 z-40 w-[91%] -translate-x-1/2 overflow-hidden rounded-[24px] border border-slate-700 bg-[#09101f] shadow-[0_30px_80px_rgba(15,23,42,0.28)] sm:w-[84%] lg:bottom-[1%] lg:w-[86%]">
               <div className="flex items-center gap-2 border-b border-slate-700/80 px-5 py-4">
                 <span className="h-3 w-3 rounded-full bg-red-400" />
@@ -529,15 +513,20 @@ export default function Home() {
 
               <div className="px-5 py-6 font-mono text-xs leading-7 sm:px-7 sm:py-7 sm:text-sm">
                 <p className="text-slate-500">$ whoami</p>
-                <p className="text-emerald-400">devops-engineer-intern</p>
+
+                <p className="text-emerald-400">
+                  devops-engineer-intern
+                </p>
 
                 <p className="mt-2 text-slate-500">$ focus</p>
+
                 <p className="text-blue-300">
                   cloud / automation / containers /
                   <br className="sm:hidden" /> reliability
                 </p>
 
                 <p className="mt-2 text-slate-500">$ status</p>
+
                 <p className="text-emerald-400">
                   learning · building · shipping
                   <span className="ml-1 inline-block h-4 w-1 animate-pulse bg-emerald-400 align-middle" />
@@ -548,9 +537,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* =========================================================
-          ABOUT
-          ========================================================= */}
+      {/* ABOUT */}
       <section id="about" className="bg-white py-24 sm:py-28">
         <div className="mx-auto max-w-7xl px-5 sm:px-8 lg:px-10">
           <motion.div
@@ -630,9 +617,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* =========================================================
-          ENGINEERING MINDSET
-          ========================================================= */}
+      {/* ENGINEERING MINDSET */}
       <section className="border-y border-slate-200 bg-[#f5f7fb] py-24 sm:py-28">
         <div className="mx-auto max-w-7xl px-5 sm:px-8 lg:px-10">
           <motion.div
@@ -664,7 +649,9 @@ export default function Home() {
                       {item.number}
                     </p>
 
-                    <h3 className="mt-4 text-lg font-black">{item.title}</h3>
+                    <h3 className="mt-4 text-lg font-black">
+                      {item.title}
+                    </h3>
 
                     <p className="mt-3 text-sm leading-6 text-slate-500">
                       {item.text}
@@ -677,9 +664,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* =========================================================
-          EXPERIENCE
-          ========================================================= */}
+      {/* EXPERIENCE */}
       <section id="experience" className="bg-white py-24 sm:py-28">
         <div className="mx-auto max-w-7xl px-5 sm:px-8 lg:px-10">
           <motion.div
@@ -708,6 +693,7 @@ export default function Home() {
                     <p className="text-[10px] font-black tracking-[0.15em] text-slate-400">
                       {experience.period}
                     </p>
+
                     <p className="mt-2 text-sm font-black text-blue-600">
                       {experience.company}
                     </p>
@@ -747,9 +733,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* =========================================================
-          WORK
-          ========================================================= */}
+      {/* WORK */}
       <section id="work" className="bg-slate-950 py-24 text-white sm:py-28">
         <div className="mx-auto max-w-7xl px-5 sm:px-8 lg:px-10">
           <motion.div
@@ -826,9 +810,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* =========================================================
-          IMPACT
-          ========================================================= */}
+      {/* IMPACT */}
       <section className="border-b border-slate-200 bg-white py-24 sm:py-28">
         <div className="mx-auto max-w-7xl px-5 sm:px-8 lg:px-10">
           <motion.div
@@ -876,9 +858,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* =========================================================
-          SKILLS
-          ========================================================= */}
+      {/* SKILLS */}
       <section id="skills" className="bg-[#f5f7fb] py-24 sm:py-28">
         <div className="mx-auto max-w-7xl px-5 sm:px-8 lg:px-10">
           <motion.div
@@ -922,9 +902,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* =========================================================
-          DIRECTION
-          ========================================================= */}
+      {/* DIRECTION */}
       <section className="bg-white py-24 sm:py-28">
         <div className="mx-auto max-w-7xl px-5 sm:px-8 lg:px-10">
           <motion.div
@@ -972,6 +950,7 @@ export default function Home() {
                       <span className="font-mono text-xs text-blue-400">
                         0{index + 1}
                       </span>
+
                       <span>{item}</span>
                     </div>
                   ))}
@@ -982,9 +961,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* =========================================================
-          EDUCATION
-          ========================================================= */}
+      {/* EDUCATION */}
       <section className="border-y border-slate-200 bg-[#f5f7fb] py-24 sm:py-28">
         <div className="mx-auto max-w-7xl px-5 sm:px-8 lg:px-10">
           <motion.div
@@ -1015,9 +992,11 @@ export default function Home() {
                   <span className="rounded-full bg-slate-100 px-3 py-2">
                     2021 – 2025
                   </span>
+
                   <span className="rounded-full bg-slate-100 px-3 py-2">
                     CGPA 7.6
                   </span>
+
                   <span className="rounded-full bg-slate-100 px-3 py-2">
                     First Class
                   </span>
@@ -1048,9 +1027,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* =========================================================
-          GITHUB
-          ========================================================= */}
+      {/* GITHUB */}
       <section className="bg-white py-24 sm:py-28">
         <div className="mx-auto max-w-7xl px-5 sm:px-8 lg:px-10">
           <motion.div
@@ -1089,9 +1066,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* =========================================================
-          CONTACT
-          ========================================================= */}
+      {/* CONTACT */}
       <section
         id="contact"
         className="bg-slate-950 py-24 text-white sm:py-28"
@@ -1152,7 +1127,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Footer */}
+      {/* FOOTER */}
       <footer className="border-t border-slate-800 bg-slate-950 px-5 py-8 text-slate-500">
         <div className="mx-auto flex max-w-7xl flex-col justify-between gap-3 text-[9px] font-black tracking-[0.18em] sm:flex-row">
           <span>ABDUL RAHMAN · DEVOPS · CLOUD · AI INFRASTRUCTURE</span>
