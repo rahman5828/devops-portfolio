@@ -1,11 +1,6 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Geist_Mono } from "next/font/google";
 import "./globals.css";
-
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
 
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
@@ -15,22 +10,19 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "Abdul Rahman — DevOps & Cloud Engineer",
   description:
-    "Early-career DevOps and cloud engineer. Containers, CI/CD, AWS, and platform work. Open to full-time and selective freelance roles.",
+    "Interactive portfolio terminal. DevOps, cloud infrastructure, platform engineering. Type help to begin.",
   openGraph: {
     title: "Abdul Rahman — DevOps & Cloud Engineer",
     description:
-      "Portfolio of infrastructure work: Docker optimization, CI/CD, AttendX, and ongoing AI infrastructure experiments.",
+      "Explore projects, experience, and skills through a portfolio shell.",
     type: "website",
   },
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html
-      lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
-    >
-      <body className="min-h-full flex flex-col font-sans">{children}</body>
+    <html lang="en" className={`${geistMono.variable} h-full`}>
+      <body className="min-h-full font-mono antialiased">{children}</body>
     </html>
   );
 }
