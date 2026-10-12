@@ -20,11 +20,18 @@ html {
 }
 
 body {
-  background: #070708;
+  background: #060607;
   color: #d4d4d8;
 }
 
 :focus-visible {
   outline: 2px solid #34d399;
   outline-offset: 2px;
+}
+
+.line-clamp-1 {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1;
 }
