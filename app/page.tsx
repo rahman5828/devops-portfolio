@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 const experiences = [
   {
@@ -42,11 +42,25 @@ const experiences = [
   },
 ];
 
-const projects = [
+type Project = {
+  title: string;
+  status: string;
+  tag: string;
+  problem: string;
+  approach: string;
+  outcome: string;
+  stack: string[];
+  note: string;
+  repo?: string;
+  featured?: boolean;
+};
+
+const projects: Project[] = [
   {
     title: "Docker Infrastructure Optimization",
     status: "Completed",
     tag: "containers",
+    featured: true,
     problem:
       "Local multi-service stack had grown to ~35 containers with high RAM use and slow startup. Much of it did not belong on a developer machine.",
     approach:
@@ -132,46 +146,99 @@ const skillGroups = [
 ];
 
 const nav = [
-  { label: "work", href: "#work" },
-  { label: "experience", href: "#experience" },
-  { label: "skills", href: "#skills" },
-  { label: "about", href: "#about" },
-  { label: "contact", href: "#contact" },
+  { id: "work", label: "work" },
+  { id: "experience", label: "experience" },
+  { id: "skills", label: "skills" },
+  { id: "about", label: "about" },
+  { id: "contact", label: "contact" },
 ];
 
 function statusColor(status: string) {
-  if (status.toLowerCase().includes("development") || status.toLowerCase().includes("building"))
+  const s = status.toLowerCase();
+  if (s.includes("development") || s.includes("building"))
     return "border-amber-500/30 bg-amber-500/10 text-amber-400";
-  if (status.toLowerCase().includes("iterating"))
-    return "border-sky-500/30 bg-sky-500/10 text-sky-400";
+  if (s.includes("iterating")) return "border-sky-500/30 bg-sky-500/10 text-sky-400";
   return "border-emerald-500/30 bg-emerald-500/10 text-emerald-400";
 }
 
 export default function Home() {
-  const [open, setOpen] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [active, setActive] = useState("");
+  const [progress, setProgress] = useState(0);
+  const [expanded, setExpanded] = useState<Record<string, boolean>>({});
+  const [copied, setCopied] = useState(false);
+  const [filter, setFilter] = useState<string>("all");
+
+  const tags = ["all", ...Array.from(new Set(projects.map((p) => p.tag)))];
+
+  useEffect(() => {
+    const onScroll = () => {
+      const h = document.documentElement.scrollHeight - window.innerHeight;
+      setProgress(h > 0 ? (window.scrollY / h) * 100 : 0);
+
+      const sections = nav.map((n) => document.getElementById(n.id)).filter(Boolean);
+      let current = "";
+      for (const el of sections) {
+        if (!el) continue;
+        const rect = el.getBoundingClientRect();
+        if (rect.top <= 120) current = el.id;
+      }
+      setActive(current);
+    };
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  const copyEmail = useCallback(async () => {
+    try {
+      await navigator.clipboard.writeText("abdulrahman6148@gmail.com");
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch {
+      /* ignore */
+    }
+  }, []);
+
+  const toggle = (title: string) =>
+    setExpanded((prev) => ({ ...prev, [title]: !prev[title] }));
+
+  const filtered =
+    filter === "all" ? projects : projects.filter((p) => p.tag === filter);
 
   return (
-    <div className="min-h-dvh bg-[#070708] text-zinc-300 selection:bg-emerald-500/30 selection:text-emerald-100">
+    <div className="min-h-dvh bg-[#060607] text-zinc-300 selection:bg-emerald-500/25 selection:text-emerald-50">
       <div aria-hidden className="pointer-events-none fixed inset-0 -z-10 overflow-hidden">
-        <div className="absolute -left-32 top-0 h-[420px] w-[420px] rounded-full bg-emerald-500/[0.04] blur-3xl" />
-        <div className="absolute -right-24 top-40 h-[360px] w-[360px] rounded-full bg-cyan-500/[0.03] blur-3xl" />
+        <div className="absolute left-1/2 top-0 h-[500px] w-[700px] -translate-x-1/2 rounded-full bg-emerald-500/[0.035] blur-[100px]" />
+        <div className="absolute right-0 top-1/3 h-[300px] w-[300px] rounded-full bg-cyan-500/[0.025] blur-[80px]" />
       </div>
 
-      <header className="sticky top-0 z-50 border-b border-white/[0.06] bg-[#070708]/80 backdrop-blur-xl">
+      <div
+        className="fixed left-0 top-0 z-[60] h-[2px] bg-gradient-to-r from-emerald-400 to-cyan-400 transition-[width] duration-150"
+        style={{ width: `${progress}%` }}
+        aria-hidden
+      />
+
+      <header className="sticky top-0 z-50 border-b border-white/[0.05] bg-[#060607]/75 backdrop-blur-xl">
         <div className="mx-auto flex h-14 max-w-5xl items-center justify-between px-5 sm:px-6">
-          <a href="#top" className="group flex items-center gap-2 font-mono text-sm">
-            <span className="flex h-7 w-7 items-center justify-center rounded-md bg-emerald-500/10 text-emerald-400 ring-1 ring-emerald-500/20 transition group-hover:bg-emerald-500/20">
+          <a href="#top" className="group flex items-center gap-2.5 font-mono text-sm">
+            <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-emerald-500/10 text-sm text-emerald-400 ring-1 ring-emerald-500/25 transition group-hover:bg-emerald-500/20 group-hover:ring-emerald-500/40">
               &gt;_
             </span>
             <span className="text-zinc-100">rahman</span>
             <span className="hidden text-zinc-600 sm:inline">/devops</span>
           </a>
-          <nav className="hidden items-center gap-1 md:flex" aria-label="Primary">
+
+          <nav className="hidden items-center gap-0.5 md:flex" aria-label="Primary">
             {nav.map((n) => (
               <a
-                key={n.href}
-                href={n.href}
-                className="rounded-md px-3 py-1.5 font-mono text-xs text-zinc-500 transition-colors hover:bg-white/[0.04] hover:text-zinc-200"
+                key={n.id}
+                href={`#${n.id}`}
+                className={`rounded-md px-3 py-1.5 font-mono text-xs transition-colors ${
+                  active === n.id
+                    ? "bg-white/[0.06] text-emerald-400"
+                    : "text-zinc-500 hover:bg-white/[0.03] hover:text-zinc-200"
+                }`}
               >
                 {n.label}
               </a>
@@ -180,27 +247,28 @@ export default function Home() {
               href="/resume.pdf"
               target="_blank"
               rel="noreferrer"
-              className="ml-2 rounded-md bg-gradient-to-b from-emerald-400 to-emerald-500 px-3 py-1.5 font-mono text-xs font-semibold text-zinc-950 shadow-[0_0_20px_-4px_rgba(52,211,153,0.5)] transition hover:from-emerald-300 hover:to-emerald-400"
+              className="ml-2 rounded-lg bg-gradient-to-b from-emerald-400 to-emerald-500 px-3.5 py-1.5 font-mono text-xs font-semibold text-zinc-950 shadow-[0_0_24px_-6px_rgba(52,211,153,0.55)] transition hover:from-emerald-300 hover:to-emerald-400"
             >
               resume.pdf
             </a>
           </nav>
+
           <button
             type="button"
-            className="inline-flex h-9 w-9 items-center justify-center rounded-md border border-white/10 text-zinc-400 transition hover:bg-white/[0.04] md:hidden"
-            aria-label={open ? "Close menu" : "Open menu"}
-            onClick={() => setOpen((v) => !v)}
+            className="inline-flex h-9 w-9 items-center justify-center rounded-lg border border-white/10 text-zinc-400 transition hover:bg-white/[0.04] md:hidden"
+            aria-label={menuOpen ? "Close menu" : "Open menu"}
+            onClick={() => setMenuOpen((v) => !v)}
           >
-            {open ? "×" : "☰"}
+            {menuOpen ? "×" : "☰"}
           </button>
         </div>
-        {open && (
-          <nav className="border-t border-white/[0.06] px-5 py-3 md:hidden">
+        {menuOpen && (
+          <nav className="border-t border-white/[0.05] px-5 py-3 md:hidden">
             {nav.map((n) => (
               <a
-                key={n.href}
-                href={n.href}
-                onClick={() => setOpen(false)}
+                key={n.id}
+                href={`#${n.id}`}
+                onClick={() => setMenuOpen(false)}
                 className="block py-2.5 font-mono text-sm text-zinc-400"
               >
                 {n.label}
@@ -219,60 +287,53 @@ export default function Home() {
       </header>
 
       <main id="top">
-        <section className="relative border-b border-white/[0.06]">
+        <section className="relative border-b border-white/[0.05]">
           <div className="mx-auto max-w-5xl px-5 py-20 sm:px-6 sm:py-24 lg:py-28">
-            <div className="inline-flex items-center gap-2 rounded-full border border-emerald-500/20 bg-emerald-500/5 px-3 py-1">
+            <div className="inline-flex items-center gap-2 rounded-full border border-emerald-500/20 bg-emerald-500/[0.06] px-3 py-1">
               <span className="relative flex h-1.5 w-1.5">
-                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-60" />
+                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-50" />
                 <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-emerald-400" />
               </span>
-              <span className="font-mono text-[11px] text-emerald-400/90">
+              <span className="font-mono text-[11px] tracking-wide text-emerald-400/90">
                 open to roles · freelancing
               </span>
             </div>
 
-            <h1 className="mt-6 text-4xl font-semibold tracking-tight text-white sm:text-5xl lg:text-[3.25rem] lg:leading-[1.1]">
+            <h1 className="mt-6 text-4xl font-semibold tracking-tight text-white sm:text-5xl lg:text-[3.4rem] lg:leading-[1.08]">
               Abdul Rahman V A
             </h1>
-            <p className="mt-2 font-mono text-sm text-emerald-400/80">
+            <p className="mt-2.5 font-mono text-sm text-emerald-400/75">
               devops · cloud · platform · ai infrastructure
             </p>
-            <p className="mt-6 max-w-2xl text-[15px] leading-7 text-zinc-400 sm:text-base sm:leading-7">
+            <p className="mt-6 max-w-2xl text-[15px] leading-7 text-zinc-400 sm:text-base">
               Early-career engineer focused on infrastructure that stays boring after it ships —
               containers that start cleanly, pipelines that catch problems early, and AWS environments
               you can actually operate.
             </p>
 
-            <div className="mt-10 overflow-hidden rounded-xl border border-white/[0.08] bg-white/[0.02] shadow-[0_0_0_1px_rgba(255,255,255,0.02)_inset]">
-              <div className="flex items-center gap-2 border-b border-white/[0.06] px-4 py-2.5">
-                <span className="h-2 w-2 rounded-full bg-[#ff5f57]" />
-                <span className="h-2 w-2 rounded-full bg-[#febc2e]" />
-                <span className="h-2 w-2 rounded-full bg-[#28c840]" />
-                <span className="ml-2 font-mono text-[10px] text-zinc-600">
-                  rahman@portfolio — status
-                </span>
-              </div>
-              <div className="grid sm:grid-cols-3">
-                {[
-                  ["FOCUS", "containers · ci/cd · aws"],
-                  ["STATUS", "freelancing · open to roles"],
-                  ["STACK", "docker · k8s · terraform · python"],
-                ].map(([k, v], i) => (
-                  <div
-                    key={k}
-                    className={`px-4 py-4 ${i < 2 ? "sm:border-r sm:border-white/[0.06]" : ""}`}
-                  >
-                    <p className="font-mono text-[10px] tracking-[0.15em] text-zinc-600">{k}</p>
-                    <p className="mt-1.5 font-mono text-xs text-zinc-300">{v}</p>
-                  </div>
-                ))}
-              </div>
+            <div className="mt-10 grid grid-cols-2 gap-3 sm:grid-cols-4">
+              {[
+                { k: "focus", v: "containers · ci/cd" },
+                { k: "cloud", v: "aws · terraform" },
+                { k: "status", v: "open to roles" },
+                { k: "side", v: "ai ops copilot" },
+              ].map((m) => (
+                <div
+                  key={m.k}
+                  className="rounded-xl border border-white/[0.06] bg-white/[0.02] px-4 py-3.5"
+                >
+                  <p className="font-mono text-[10px] uppercase tracking-[0.14em] text-zinc-600">
+                    {m.k}
+                  </p>
+                  <p className="mt-1.5 font-mono text-xs text-zinc-300">{m.v}</p>
+                </div>
+              ))}
             </div>
 
             <div className="mt-9 flex flex-wrap items-center gap-3">
               <a
                 href="#work"
-                className="inline-flex items-center rounded-lg bg-gradient-to-b from-emerald-400 to-emerald-500 px-5 py-2.5 text-sm font-semibold text-zinc-950 shadow-[0_0_24px_-6px_rgba(52,211,153,0.55)] transition hover:from-emerald-300 hover:to-emerald-400"
+                className="inline-flex items-center rounded-lg bg-gradient-to-b from-emerald-400 to-emerald-500 px-5 py-2.5 text-sm font-semibold text-zinc-950 shadow-[0_0_28px_-6px_rgba(52,211,153,0.5)] transition hover:from-emerald-300 hover:to-emerald-400"
               >
                 View work
               </a>
@@ -288,30 +349,30 @@ export default function Home() {
                 href="https://github.com/rahman5828"
                 target="_blank"
                 rel="noreferrer"
-                className="inline-flex items-center px-3 py-2.5 font-mono text-sm text-zinc-500 transition hover:text-emerald-400"
+                className="inline-flex items-center gap-1 px-2.5 py-2.5 font-mono text-sm text-zinc-500 transition hover:text-emerald-400"
               >
-                github ↗
+                github <span className="text-zinc-600">↗</span>
               </a>
               <a
                 href="https://www.linkedin.com/in/rahman-devops/"
                 target="_blank"
                 rel="noreferrer"
-                className="inline-flex items-center px-3 py-2.5 font-mono text-sm text-zinc-500 transition hover:text-emerald-400"
+                className="inline-flex items-center gap-1 px-2.5 py-2.5 font-mono text-sm text-zinc-500 transition hover:text-emerald-400"
               >
-                linkedin ↗
+                linkedin <span className="text-zinc-600">↗</span>
               </a>
             </div>
           </div>
         </section>
 
-        <section id="work" className="border-b border-white/[0.06]">
+        <section id="work" className="scroll-mt-16 border-b border-white/[0.05]">
           <div className="mx-auto max-w-5xl px-5 py-16 sm:px-6 sm:py-20">
-            <div className="flex flex-wrap items-end justify-between gap-3">
+            <div className="flex flex-wrap items-end justify-between gap-4">
               <div>
-                <p className="font-mono text-xs text-emerald-400/70">$ ls projects/</p>
+                <p className="font-mono text-xs text-emerald-400/60">$ ls projects/</p>
                 <h2 className="mt-1 text-2xl font-semibold tracking-tight text-white">Work</h2>
                 <p className="mt-1.5 text-sm text-zinc-500">
-                  Problem, approach, outcome — status is explicit.
+                  Case studies with problem → approach → outcome.
                 </p>
               </div>
               <a
@@ -324,117 +385,183 @@ export default function Home() {
               </a>
             </div>
 
-            <div className="mt-10 space-y-4">
-              {projects.map((p, idx) => (
-                <article
-                  key={p.title}
-                  className="group rounded-xl border border-white/[0.06] bg-white/[0.02] p-5 transition duration-200 hover:border-emerald-500/20 hover:bg-white/[0.035] sm:p-6"
+            <div className="mt-8 flex flex-wrap gap-2">
+              {tags.map((t) => (
+                <button
+                  key={t}
+                  type="button"
+                  onClick={() => setFilter(t)}
+                  className={`rounded-full border px-3 py-1 font-mono text-[11px] transition ${
+                    filter === t
+                      ? "border-emerald-500/40 bg-emerald-500/10 text-emerald-400"
+                      : "border-white/[0.08] text-zinc-500 hover:border-white/15 hover:text-zinc-300"
+                  }`}
                 >
-                  <div className="flex flex-wrap items-start justify-between gap-3">
-                    <div className="flex items-start gap-3">
-                      <span className="mt-0.5 font-mono text-xs text-zinc-600">
-                        {String(idx + 1).padStart(2, "0")}
-                      </span>
-                      <div>
-                        <h3 className="text-base font-semibold text-zinc-50 transition group-hover:text-white">
-                          {p.title}
-                        </h3>
-                        <p className="mt-1 font-mono text-[10px] uppercase tracking-[0.12em] text-zinc-600">
-                          {p.tag}
-                        </p>
-                      </div>
-                    </div>
-                    <span
-                      className={`rounded-full border px-2.5 py-0.5 font-mono text-[11px] ${statusColor(p.status)}`}
-                    >
-                      {p.status}
-                    </span>
-                  </div>
-
-                  <dl className="mt-5 space-y-3.5 border-t border-white/[0.04] pt-5 text-sm leading-6 text-zinc-400">
-                    <div>
-                      <dt className="mb-0.5 font-mono text-[11px] text-emerald-500/70">problem</dt>
-                      <dd>{p.problem}</dd>
-                    </div>
-                    <div>
-                      <dt className="mb-0.5 font-mono text-[11px] text-emerald-500/70">approach</dt>
-                      <dd>{p.approach}</dd>
-                    </div>
-                    <div>
-                      <dt className="mb-0.5 font-mono text-[11px] text-emerald-500/70">outcome</dt>
-                      <dd>{p.outcome}</dd>
-                    </div>
-                  </dl>
-
-                  <div className="mt-5 flex flex-wrap items-center gap-2">
-                    {p.stack.map((t) => (
-                      <span
-                        key={t}
-                        className="rounded-md border border-white/[0.06] bg-black/30 px-2 py-0.5 font-mono text-[11px] text-zinc-500"
-                      >
-                        {t}
-                      </span>
-                    ))}
-                  </div>
-                  <div className="mt-3 flex flex-wrap items-center gap-3">
-                    <p className="font-mono text-[11px] text-zinc-600">{p.note}</p>
-                    {"repo" in p && p.repo && (
-                      <a
-                        href={p.repo}
-                        target="_blank"
-                        rel="noreferrer"
-                        className="font-mono text-[11px] text-emerald-500/80 transition hover:text-emerald-400"
-                      >
-                        repo →
-                      </a>
-                    )}
-                  </div>
-                </article>
+                  {t}
+                </button>
               ))}
+            </div>
+
+            <div className="mt-8 space-y-3">
+              {filtered.map((p, idx) => {
+                const isOpen = expanded[p.title] ?? !!p.featured;
+                return (
+                  <article
+                    key={p.title}
+                    className={`rounded-xl border transition duration-200 ${
+                      isOpen
+                        ? "border-emerald-500/15 bg-white/[0.03]"
+                        : "border-white/[0.06] bg-white/[0.015] hover:border-white/10 hover:bg-white/[0.025]"
+                    }`}
+                  >
+                    <button
+                      type="button"
+                      onClick={() => toggle(p.title)}
+                      className="flex w-full items-start justify-between gap-3 p-5 text-left sm:p-6"
+                      aria-expanded={isOpen}
+                    >
+                      <div className="flex items-start gap-3">
+                        <span className="mt-0.5 font-mono text-xs text-zinc-600">
+                          {String(idx + 1).padStart(2, "0")}
+                        </span>
+                        <div>
+                          <div className="flex flex-wrap items-center gap-2">
+                            <h3 className="text-base font-semibold text-zinc-50">{p.title}</h3>
+                            {p.featured && (
+                              <span className="rounded border border-emerald-500/20 bg-emerald-500/10 px-1.5 py-0.5 font-mono text-[10px] text-emerald-400">
+                                featured
+                              </span>
+                            )}
+                          </div>
+                          <p className="mt-1 font-mono text-[10px] uppercase tracking-[0.12em] text-zinc-600">
+                            {p.tag}
+                          </p>
+                          {!isOpen && (
+                            <p className="mt-2 line-clamp-1 text-sm text-zinc-500">{p.outcome}</p>
+                          )}
+                        </div>
+                      </div>
+                      <div className="flex shrink-0 items-center gap-2">
+                        <span
+                          className={`hidden rounded-full border px-2.5 py-0.5 font-mono text-[11px] sm:inline ${statusColor(p.status)}`}
+                        >
+                          {p.status}
+                        </span>
+                        <span
+                          className={`font-mono text-zinc-600 transition ${isOpen ? "rotate-45" : ""}`}
+                        >
+                          +
+                        </span>
+                      </div>
+                    </button>
+
+                    {isOpen && (
+                      <div className="border-t border-white/[0.04] px-5 pb-5 sm:px-6 sm:pb-6">
+                        <span
+                          className={`mb-4 mt-4 inline-flex rounded-full border px-2.5 py-0.5 font-mono text-[11px] sm:hidden ${statusColor(p.status)}`}
+                        >
+                          {p.status}
+                        </span>
+                        <dl className="space-y-3.5 text-sm leading-6 text-zinc-400">
+                          <div>
+                            <dt className="mb-0.5 font-mono text-[11px] text-emerald-500/65">
+                              problem
+                            </dt>
+                            <dd>{p.problem}</dd>
+                          </div>
+                          <div>
+                            <dt className="mb-0.5 font-mono text-[11px] text-emerald-500/65">
+                              approach
+                            </dt>
+                            <dd>{p.approach}</dd>
+                          </div>
+                          <div>
+                            <dt className="mb-0.5 font-mono text-[11px] text-emerald-500/65">
+                              outcome
+                            </dt>
+                            <dd>{p.outcome}</dd>
+                          </div>
+                        </dl>
+                        <div className="mt-4 flex flex-wrap gap-1.5">
+                          {p.stack.map((t) => (
+                            <span
+                              key={t}
+                              className="rounded-md border border-white/[0.06] bg-black/40 px-2 py-0.5 font-mono text-[11px] text-zinc-500"
+                            >
+                              {t}
+                            </span>
+                          ))}
+                        </div>
+                        <div className="mt-3 flex flex-wrap items-center gap-3">
+                          <p className="font-mono text-[11px] text-zinc-600">{p.note}</p>
+                          {p.repo && (
+                            <a
+                              href={p.repo}
+                              target="_blank"
+                              rel="noreferrer"
+                              className="font-mono text-[11px] text-emerald-500/80 transition hover:text-emerald-400"
+                            >
+                              repo →
+                            </a>
+                          )}
+                        </div>
+                      </div>
+                    )}
+                  </article>
+                );
+              })}
             </div>
           </div>
         </section>
 
-        <section id="experience" className="border-b border-white/[0.06]">
+        <section id="experience" className="scroll-mt-16 border-b border-white/[0.05]">
           <div className="mx-auto max-w-5xl px-5 py-16 sm:px-6 sm:py-20">
-            <p className="font-mono text-xs text-emerald-400/70">$ cat experience.log</p>
+            <p className="font-mono text-xs text-emerald-400/60">$ cat experience.log</p>
             <h2 className="mt-1 text-2xl font-semibold tracking-tight text-white">Experience</h2>
 
-            <ol className="mt-10">
-              {experiences.map((e, i) => (
-                <li
-                  key={e.company + e.period}
-                  className={`grid gap-2 border-t border-white/[0.06] py-8 sm:grid-cols-[160px_1fr] sm:gap-10 ${
-                    i === experiences.length - 1 ? "border-b" : ""
-                  }`}
-                >
-                  <div>
-                    <p className="font-mono text-xs text-zinc-500">{e.period}</p>
-                    <p className="mt-1.5 text-sm font-medium text-zinc-300">{e.company}</p>
-                  </div>
-                  <div>
-                    <h3 className="text-base font-semibold text-zinc-50">{e.role}</h3>
-                    <ul className="mt-3 space-y-2">
-                      {e.points.map((pt) => (
-                        <li key={pt} className="flex gap-2.5 text-sm leading-6 text-zinc-400">
-                          <span className="mt-2.5 h-1 w-1 shrink-0 rounded-full bg-emerald-400/70" />
-                          {pt}
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                </li>
-              ))}
-            </ol>
+            <div className="relative mt-10">
+              <div
+                className="absolute left-[7px] top-2 bottom-2 w-px bg-gradient-to-b from-emerald-500/40 via-white/10 to-transparent"
+                aria-hidden
+              />
+              <ol>
+                {experiences.map((e) => (
+                  <li
+                    key={e.company + e.period}
+                    className="relative grid gap-2 py-6 sm:grid-cols-[160px_1fr] sm:gap-10"
+                  >
+                    <div className="flex items-start gap-3 sm:block">
+                      <span className="relative z-10 mt-1.5 flex h-3.5 w-3.5 shrink-0 items-center justify-center rounded-full border border-emerald-500/40 bg-[#060607]">
+                        <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
+                      </span>
+                      <div>
+                        <p className="font-mono text-xs text-zinc-500 sm:ml-6">{e.period}</p>
+                        <p className="mt-1 text-sm font-medium text-zinc-300 sm:ml-6">{e.company}</p>
+                      </div>
+                    </div>
+                    <div className="pl-7 sm:pl-0">
+                      <h3 className="text-base font-semibold text-zinc-50">{e.role}</h3>
+                      <ul className="mt-2.5 space-y-2">
+                        {e.points.map((pt) => (
+                          <li key={pt} className="text-sm leading-6 text-zinc-400">
+                            {pt}
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  </li>
+                ))}
+              </ol>
+            </div>
           </div>
         </section>
 
-        <section id="skills" className="border-b border-white/[0.06]">
+        <section id="skills" className="scroll-mt-16 border-b border-white/[0.05]">
           <div className="mx-auto max-w-5xl px-5 py-16 sm:px-6 sm:py-20">
-            <p className="font-mono text-xs text-emerald-400/70">$ which tools</p>
+            <p className="font-mono text-xs text-emerald-400/60">$ which tools</p>
             <h2 className="mt-1 text-2xl font-semibold tracking-tight text-white">Skills</h2>
             <p className="mt-1.5 text-sm text-zinc-500">
-              Tools used on real work or structured practice — not a wish list.
+              Used on real work or structured practice — not a wish list.
             </p>
             <div className="mt-8 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
               {skillGroups.map((g) => (
@@ -442,17 +569,26 @@ export default function Home() {
                   key={g.title}
                   className="rounded-xl border border-white/[0.06] bg-white/[0.02] p-5 transition hover:border-emerald-500/15 hover:bg-white/[0.035]"
                 >
-                  <h3 className="font-mono text-xs tracking-wide text-emerald-400/80">{g.title}</h3>
-                  <p className="mt-2.5 text-sm leading-6 text-zinc-400">{g.items.join(" · ")}</p>
+                  <h3 className="font-mono text-xs tracking-wide text-emerald-400/75">{g.title}</h3>
+                  <div className="mt-3 flex flex-wrap gap-1.5">
+                    {g.items.map((item) => (
+                      <span
+                        key={item}
+                        className="rounded-md border border-white/[0.06] bg-black/30 px-2 py-0.5 font-mono text-[11px] text-zinc-400"
+                      >
+                        {item}
+                      </span>
+                    ))}
+                  </div>
                 </div>
               ))}
             </div>
           </div>
         </section>
 
-        <section id="about" className="border-b border-white/[0.06]">
+        <section id="about" className="scroll-mt-16 border-b border-white/[0.05]">
           <div className="mx-auto max-w-5xl px-5 py-16 sm:px-6 sm:py-20">
-            <p className="font-mono text-xs text-emerald-400/70">$ whoami</p>
+            <p className="font-mono text-xs text-emerald-400/60">$ whoami</p>
             <h2 className="mt-1 text-2xl font-semibold tracking-tight text-white">About</h2>
             <div className="mt-6 max-w-2xl space-y-4 text-sm leading-7 text-zinc-400">
               <p>
@@ -467,7 +603,7 @@ export default function Home() {
             </div>
             <div className="mt-8 grid gap-3 sm:grid-cols-2">
               <div className="rounded-xl border border-white/[0.06] bg-white/[0.02] p-5">
-                <h3 className="font-mono text-xs text-emerald-400/80">education</h3>
+                <h3 className="font-mono text-xs text-emerald-400/75">education</h3>
                 <p className="mt-2.5 text-sm leading-6 text-zinc-400">
                   B.E. Computer Science and Engineering
                   <br />
@@ -477,7 +613,7 @@ export default function Home() {
                 </p>
               </div>
               <div className="rounded-xl border border-white/[0.06] bg-white/[0.02] p-5">
-                <h3 className="font-mono text-xs text-emerald-400/80">certifications</h3>
+                <h3 className="font-mono text-xs text-emerald-400/75">certifications</h3>
                 <ul className="mt-2.5 space-y-1.5 text-sm text-zinc-400">
                   <li>AWS Cloud Practitioner — AWS Cloud Quest</li>
                   <li>Linux Essentials — Besant Technologies</li>
@@ -487,53 +623,82 @@ export default function Home() {
           </div>
         </section>
 
-        <section id="contact">
+        <section id="contact" className="scroll-mt-16">
           <div className="mx-auto max-w-5xl px-5 py-16 sm:px-6 sm:py-20">
-            <p className="font-mono text-xs text-emerald-400/70">$ cat contact.txt</p>
+            <p className="font-mono text-xs text-emerald-400/60">$ cat contact.txt</p>
             <h2 className="mt-1 text-2xl font-semibold tracking-tight text-white">Contact</h2>
             <p className="mt-3 max-w-xl text-sm leading-6 text-zinc-400">
               Open to full-time DevOps, Cloud, and Platform roles, and selective freelance work.
             </p>
-            <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:gap-4">
-              <a
-                href="mailto:abdulrahman6148@gmail.com"
-                className="inline-flex items-center gap-2 rounded-lg border border-emerald-500/20 bg-emerald-500/5 px-4 py-2.5 font-mono text-sm text-emerald-400 transition hover:bg-emerald-500/10"
-              >
-                abdulrahman6148@gmail.com
-              </a>
-              <a
-                href="https://github.com/rahman5828"
-                target="_blank"
-                rel="noreferrer"
-                className="inline-flex items-center rounded-lg border border-white/10 px-4 py-2.5 font-mono text-sm text-zinc-400 transition hover:border-white/20 hover:text-zinc-200"
-              >
-                github ↗
-              </a>
-              <a
-                href="https://www.linkedin.com/in/rahman-devops/"
-                target="_blank"
-                rel="noreferrer"
-                className="inline-flex items-center rounded-lg border border-white/10 px-4 py-2.5 font-mono text-sm text-zinc-400 transition hover:border-white/20 hover:text-zinc-200"
-              >
-                linkedin ↗
-              </a>
-              <a
-                href="/resume.pdf"
-                target="_blank"
-                rel="noreferrer"
-                className="inline-flex items-center rounded-lg border border-white/10 px-4 py-2.5 font-mono text-sm text-zinc-400 transition hover:border-white/20 hover:text-zinc-200"
-              >
-                resume.pdf ↗
-              </a>
+
+            <div className="mt-8 grid gap-3 sm:grid-cols-2">
+              <div className="rounded-xl border border-emerald-500/15 bg-emerald-500/[0.04] p-5">
+                <p className="font-mono text-[10px] uppercase tracking-wider text-emerald-500/70">
+                  email
+                </p>
+                <a
+                  href="mailto:abdulrahman6148@gmail.com"
+                  className="mt-2 block font-mono text-sm text-emerald-400 hover:underline"
+                >
+                  abdulrahman6148@gmail.com
+                </a>
+                <button
+                  type="button"
+                  onClick={copyEmail}
+                  className="mt-3 rounded-md border border-emerald-500/25 bg-emerald-500/10 px-3 py-1.5 font-mono text-[11px] text-emerald-400 transition hover:bg-emerald-500/20"
+                >
+                  {copied ? "copied ✓" : "copy email"}
+                </button>
+              </div>
+              <div className="rounded-xl border border-white/[0.06] bg-white/[0.02] p-5">
+                <p className="font-mono text-[10px] uppercase tracking-wider text-zinc-600">links</p>
+                <ul className="mt-2 space-y-2 font-mono text-sm">
+                  <li>
+                    <a
+                      href="https://github.com/rahman5828"
+                      target="_blank"
+                      rel="noreferrer"
+                      className="text-zinc-400 transition hover:text-emerald-400"
+                    >
+                      github.com/rahman5828 ↗
+                    </a>
+                  </li>
+                  <li>
+                    <a
+                      href="https://www.linkedin.com/in/rahman-devops/"
+                      target="_blank"
+                      rel="noreferrer"
+                      className="text-zinc-400 transition hover:text-emerald-400"
+                    >
+                      linkedin.com/in/rahman-devops ↗
+                    </a>
+                  </li>
+                  <li>
+                    <a
+                      href="/resume.pdf"
+                      target="_blank"
+                      rel="noreferrer"
+                      className="text-zinc-400 transition hover:text-emerald-400"
+                    >
+                      resume.pdf ↗
+                    </a>
+                  </li>
+                </ul>
+              </div>
             </div>
           </div>
         </section>
       </main>
 
-      <footer className="border-t border-white/[0.06]">
-        <div className="mx-auto flex max-w-5xl flex-col gap-1 px-5 py-6 font-mono text-[11px] text-zinc-600 sm:flex-row sm:items-center sm:justify-between sm:px-6">
+      <footer className="border-t border-white/[0.05]">
+        <div className="mx-auto flex max-w-5xl flex-col gap-2 px-5 py-6 font-mono text-[11px] text-zinc-600 sm:flex-row sm:items-center sm:justify-between sm:px-6">
           <span>abdul rahman v a · devops · cloud · platform</span>
-          <span>built with next.js</span>
+          <span className="flex items-center gap-3">
+            <span>next.js · tailwind</span>
+            <a href="#top" className="text-zinc-500 transition hover:text-emerald-400">
+              ↑ top
+            </a>
+          </span>
         </div>
       </footer>
     </div>
