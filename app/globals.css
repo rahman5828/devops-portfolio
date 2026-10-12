@@ -13,10 +13,14 @@ html {
   html {
     scroll-behavior: auto;
   }
+
+  .animate-ping {
+    animation: none !important;
+  }
 }
 
 body {
-  background: #0a0a0b;
+  background: #070708;
   color: #d4d4d8;
 }
 
