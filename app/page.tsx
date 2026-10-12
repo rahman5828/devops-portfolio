@@ -139,24 +139,39 @@ const nav = [
   { label: "contact", href: "#contact" },
 ];
 
+function statusColor(status: string) {
+  if (status.toLowerCase().includes("development") || status.toLowerCase().includes("building"))
+    return "border-amber-500/30 bg-amber-500/10 text-amber-400";
+  if (status.toLowerCase().includes("iterating"))
+    return "border-sky-500/30 bg-sky-500/10 text-sky-400";
+  return "border-emerald-500/30 bg-emerald-500/10 text-emerald-400";
+}
+
 export default function Home() {
   const [open, setOpen] = useState(false);
 
   return (
-    <div className="min-h-dvh bg-[#0a0a0b] text-zinc-300 antialiased">
-      <header className="sticky top-0 z-50 border-b border-zinc-800/80 bg-[#0a0a0b]/90 backdrop-blur-md">
+    <div className="min-h-dvh bg-[#070708] text-zinc-300 selection:bg-emerald-500/30 selection:text-emerald-100">
+      <div aria-hidden className="pointer-events-none fixed inset-0 -z-10 overflow-hidden">
+        <div className="absolute -left-32 top-0 h-[420px] w-[420px] rounded-full bg-emerald-500/[0.04] blur-3xl" />
+        <div className="absolute -right-24 top-40 h-[360px] w-[360px] rounded-full bg-cyan-500/[0.03] blur-3xl" />
+      </div>
+
+      <header className="sticky top-0 z-50 border-b border-white/[0.06] bg-[#070708]/80 backdrop-blur-xl">
         <div className="mx-auto flex h-14 max-w-5xl items-center justify-between px-5 sm:px-6">
-          <a href="#top" className="flex items-center gap-2 font-mono text-sm">
-            <span className="text-emerald-400">&gt;_</span>
+          <a href="#top" className="group flex items-center gap-2 font-mono text-sm">
+            <span className="flex h-7 w-7 items-center justify-center rounded-md bg-emerald-500/10 text-emerald-400 ring-1 ring-emerald-500/20 transition group-hover:bg-emerald-500/20">
+              &gt;_
+            </span>
             <span className="text-zinc-100">rahman</span>
             <span className="hidden text-zinc-600 sm:inline">/devops</span>
           </a>
-          <nav className="hidden items-center gap-6 md:flex" aria-label="Primary">
+          <nav className="hidden items-center gap-1 md:flex" aria-label="Primary">
             {nav.map((n) => (
               <a
                 key={n.href}
                 href={n.href}
-                className="font-mono text-xs text-zinc-500 transition-colors hover:text-emerald-400"
+                className="rounded-md px-3 py-1.5 font-mono text-xs text-zinc-500 transition-colors hover:bg-white/[0.04] hover:text-zinc-200"
               >
                 {n.label}
               </a>
@@ -165,14 +180,14 @@ export default function Home() {
               href="/resume.pdf"
               target="_blank"
               rel="noreferrer"
-              className="rounded-md bg-emerald-500/15 px-3 py-1.5 font-mono text-xs font-medium text-emerald-400 ring-1 ring-emerald-500/30 transition-colors hover:bg-emerald-500/25"
+              className="ml-2 rounded-md bg-gradient-to-b from-emerald-400 to-emerald-500 px-3 py-1.5 font-mono text-xs font-semibold text-zinc-950 shadow-[0_0_20px_-4px_rgba(52,211,153,0.5)] transition hover:from-emerald-300 hover:to-emerald-400"
             >
               resume.pdf
             </a>
           </nav>
           <button
             type="button"
-            className="inline-flex h-9 w-9 items-center justify-center rounded-md border border-zinc-800 text-zinc-400 md:hidden"
+            className="inline-flex h-9 w-9 items-center justify-center rounded-md border border-white/10 text-zinc-400 transition hover:bg-white/[0.04] md:hidden"
             aria-label={open ? "Close menu" : "Open menu"}
             onClick={() => setOpen((v) => !v)}
           >
@@ -180,7 +195,7 @@ export default function Home() {
           </button>
         </div>
         {open && (
-          <nav className="border-t border-zinc-800 px-5 py-3 md:hidden">
+          <nav className="border-t border-white/[0.06] px-5 py-3 md:hidden">
             {nav.map((n) => (
               <a
                 key={n.href}
@@ -204,48 +219,60 @@ export default function Home() {
       </header>
 
       <main id="top">
-        <section className="border-b border-zinc-800/80">
-          <div className="mx-auto max-w-5xl px-5 py-16 sm:px-6 sm:py-20 lg:py-24">
-            <p className="font-mono text-xs tracking-wide text-emerald-400/90">
-              devops · cloud · platform · ai infrastructure
-            </p>
-            <h1 className="mt-4 text-3xl font-semibold tracking-tight text-zinc-50 sm:text-4xl lg:text-5xl">
+        <section className="relative border-b border-white/[0.06]">
+          <div className="mx-auto max-w-5xl px-5 py-20 sm:px-6 sm:py-24 lg:py-28">
+            <div className="inline-flex items-center gap-2 rounded-full border border-emerald-500/20 bg-emerald-500/5 px-3 py-1">
+              <span className="relative flex h-1.5 w-1.5">
+                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-60" />
+                <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-emerald-400" />
+              </span>
+              <span className="font-mono text-[11px] text-emerald-400/90">
+                open to roles · freelancing
+              </span>
+            </div>
+
+            <h1 className="mt-6 text-4xl font-semibold tracking-tight text-white sm:text-5xl lg:text-[3.25rem] lg:leading-[1.1]">
               Abdul Rahman V A
             </h1>
-            <p className="mt-5 max-w-2xl text-base leading-7 text-zinc-400 sm:text-lg">
+            <p className="mt-2 font-mono text-sm text-emerald-400/80">
+              devops · cloud · platform · ai infrastructure
+            </p>
+            <p className="mt-6 max-w-2xl text-[15px] leading-7 text-zinc-400 sm:text-base sm:leading-7">
               Early-career engineer focused on infrastructure that stays boring after it ships —
               containers that start cleanly, pipelines that catch problems early, and AWS environments
               you can actually operate.
             </p>
-            <p className="mt-3 max-w-2xl text-sm leading-6 text-zinc-500">
-              Open to full-time DevOps / Cloud / Platform roles and selective freelance work.
-            </p>
 
-            <div className="mt-8 overflow-hidden rounded-lg border border-zinc-800 bg-[#111113]">
-              <div className="flex items-center gap-2 border-b border-zinc-800 px-3 py-2">
-                <span className="h-2 w-2 rounded-full bg-zinc-600" />
-                <span className="h-2 w-2 rounded-full bg-zinc-600" />
-                <span className="h-2 w-2 rounded-full bg-zinc-600" />
-                <span className="ml-2 font-mono text-[10px] text-zinc-600">status · read-only</span>
+            <div className="mt-10 overflow-hidden rounded-xl border border-white/[0.08] bg-white/[0.02] shadow-[0_0_0_1px_rgba(255,255,255,0.02)_inset]">
+              <div className="flex items-center gap-2 border-b border-white/[0.06] px-4 py-2.5">
+                <span className="h-2 w-2 rounded-full bg-[#ff5f57]" />
+                <span className="h-2 w-2 rounded-full bg-[#febc2e]" />
+                <span className="h-2 w-2 rounded-full bg-[#28c840]" />
+                <span className="ml-2 font-mono text-[10px] text-zinc-600">
+                  rahman@portfolio — status
+                </span>
               </div>
-              <div className="grid gap-px bg-zinc-800 sm:grid-cols-3">
+              <div className="grid sm:grid-cols-3">
                 {[
-                  ["focus", "containers · ci/cd · aws"],
-                  ["status", "freelancing · open to roles"],
-                  ["stack", "docker · k8s · terraform · python"],
-                ].map(([k, v]) => (
-                  <div key={k} className="bg-[#111113] px-4 py-3">
-                    <p className="font-mono text-[10px] uppercase tracking-wider text-zinc-600">{k}</p>
-                    <p className="mt-1 font-mono text-xs text-zinc-300">{v}</p>
+                  ["FOCUS", "containers · ci/cd · aws"],
+                  ["STATUS", "freelancing · open to roles"],
+                  ["STACK", "docker · k8s · terraform · python"],
+                ].map(([k, v], i) => (
+                  <div
+                    key={k}
+                    className={`px-4 py-4 ${i < 2 ? "sm:border-r sm:border-white/[0.06]" : ""}`}
+                  >
+                    <p className="font-mono text-[10px] tracking-[0.15em] text-zinc-600">{k}</p>
+                    <p className="mt-1.5 font-mono text-xs text-zinc-300">{v}</p>
                   </div>
                 ))}
               </div>
             </div>
 
-            <div className="mt-8 flex flex-wrap items-center gap-3">
+            <div className="mt-9 flex flex-wrap items-center gap-3">
               <a
                 href="#work"
-                className="inline-flex items-center rounded-md bg-emerald-500 px-4 py-2.5 text-sm font-medium text-zinc-950 transition-colors hover:bg-emerald-400"
+                className="inline-flex items-center rounded-lg bg-gradient-to-b from-emerald-400 to-emerald-500 px-5 py-2.5 text-sm font-semibold text-zinc-950 shadow-[0_0_24px_-6px_rgba(52,211,153,0.55)] transition hover:from-emerald-300 hover:to-emerald-400"
               >
                 View work
               </a>
@@ -253,7 +280,7 @@ export default function Home() {
                 href="/resume.pdf"
                 target="_blank"
                 rel="noreferrer"
-                className="inline-flex items-center rounded-md border border-zinc-700 bg-transparent px-4 py-2.5 text-sm font-medium text-zinc-300 transition-colors hover:border-zinc-500 hover:text-zinc-100"
+                className="inline-flex items-center rounded-lg border border-white/10 bg-white/[0.03] px-5 py-2.5 text-sm font-medium text-zinc-200 transition hover:border-white/20 hover:bg-white/[0.06]"
               >
                 Resume
               </a>
@@ -261,80 +288,89 @@ export default function Home() {
                 href="https://github.com/rahman5828"
                 target="_blank"
                 rel="noreferrer"
-                className="inline-flex items-center px-2 py-2.5 font-mono text-sm text-zinc-500 transition-colors hover:text-emerald-400"
+                className="inline-flex items-center px-3 py-2.5 font-mono text-sm text-zinc-500 transition hover:text-emerald-400"
               >
-                github
+                github ↗
               </a>
               <a
                 href="https://www.linkedin.com/in/rahman-devops/"
                 target="_blank"
                 rel="noreferrer"
-                className="inline-flex items-center px-2 py-2.5 font-mono text-sm text-zinc-500 transition-colors hover:text-emerald-400"
+                className="inline-flex items-center px-3 py-2.5 font-mono text-sm text-zinc-500 transition hover:text-emerald-400"
               >
-                linkedin
+                linkedin ↗
               </a>
             </div>
           </div>
         </section>
 
-        <section id="work" className="border-b border-zinc-800/80">
+        <section id="work" className="border-b border-white/[0.06]">
           <div className="mx-auto max-w-5xl px-5 py-16 sm:px-6 sm:py-20">
             <div className="flex flex-wrap items-end justify-between gap-3">
               <div>
-                <p className="font-mono text-xs text-emerald-400/80">$ ls projects/</p>
-                <h2 className="mt-1 text-xl font-semibold text-zinc-50">Work</h2>
-                <p className="mt-1 text-sm text-zinc-500">
-                  Problem, approach, outcome. Status is explicit.
+                <p className="font-mono text-xs text-emerald-400/70">$ ls projects/</p>
+                <h2 className="mt-1 text-2xl font-semibold tracking-tight text-white">Work</h2>
+                <p className="mt-1.5 text-sm text-zinc-500">
+                  Problem, approach, outcome — status is explicit.
                 </p>
               </div>
               <a
                 href="https://github.com/rahman5828"
                 target="_blank"
                 rel="noreferrer"
-                className="font-mono text-xs text-zinc-500 hover:text-emerald-400"
+                className="font-mono text-xs text-zinc-500 transition hover:text-emerald-400"
               >
                 github.com/rahman5828 →
               </a>
             </div>
 
-            <div className="mt-10 space-y-5">
-              {projects.map((p) => (
+            <div className="mt-10 space-y-4">
+              {projects.map((p, idx) => (
                 <article
                   key={p.title}
-                  className="rounded-lg border border-zinc-800 bg-[#111113] p-5 sm:p-6"
+                  className="group rounded-xl border border-white/[0.06] bg-white/[0.02] p-5 transition duration-200 hover:border-emerald-500/20 hover:bg-white/[0.035] sm:p-6"
                 >
-                  <div className="flex flex-wrap items-start justify-between gap-2">
-                    <div>
-                      <h3 className="text-base font-semibold text-zinc-100">{p.title}</h3>
-                      <p className="mt-1 font-mono text-[10px] uppercase tracking-wider text-zinc-600">
-                        {p.tag}
-                      </p>
+                  <div className="flex flex-wrap items-start justify-between gap-3">
+                    <div className="flex items-start gap-3">
+                      <span className="mt-0.5 font-mono text-xs text-zinc-600">
+                        {String(idx + 1).padStart(2, "0")}
+                      </span>
+                      <div>
+                        <h3 className="text-base font-semibold text-zinc-50 transition group-hover:text-white">
+                          {p.title}
+                        </h3>
+                        <p className="mt-1 font-mono text-[10px] uppercase tracking-[0.12em] text-zinc-600">
+                          {p.tag}
+                        </p>
+                      </div>
                     </div>
-                    <span className="rounded border border-zinc-700 bg-zinc-900 px-2 py-0.5 font-mono text-[11px] text-zinc-400">
+                    <span
+                      className={`rounded-full border px-2.5 py-0.5 font-mono text-[11px] ${statusColor(p.status)}`}
+                    >
                       {p.status}
                     </span>
                   </div>
 
-                  <dl className="mt-5 space-y-3 text-sm leading-6 text-zinc-400">
+                  <dl className="mt-5 space-y-3.5 border-t border-white/[0.04] pt-5 text-sm leading-6 text-zinc-400">
                     <div>
-                      <dt className="font-mono text-[11px] text-emerald-500/80">problem</dt>
-                      <dd className="mt-0.5">{p.problem}</dd>
+                      <dt className="mb-0.5 font-mono text-[11px] text-emerald-500/70">problem</dt>
+                      <dd>{p.problem}</dd>
                     </div>
                     <div>
-                      <dt className="font-mono text-[11px] text-emerald-500/80">approach</dt>
-                      <dd className="mt-0.5">{p.approach}</dd>
+                      <dt className="mb-0.5 font-mono text-[11px] text-emerald-500/70">approach</dt>
+                      <dd>{p.approach}</dd>
                     </div>
                     <div>
-                      <dt className="font-mono text-[11px] text-emerald-500/80">outcome</dt>
-                      <dd className="mt-0.5">{p.outcome}</dd>
+                      <dt className="mb-0.5 font-mono text-[11px] text-emerald-500/70">outcome</dt>
+                      <dd>{p.outcome}</dd>
                     </div>
                   </dl>
 
-                  <div className="mt-4 flex flex-wrap gap-1.5">
+                  <div className="mt-5 flex flex-wrap items-center gap-2">
                     {p.stack.map((t) => (
                       <span
                         key={t}
-                        className="rounded border border-zinc-800 bg-zinc-900/80 px-2 py-0.5 font-mono text-[11px] text-zinc-500"
+                        className="rounded-md border border-white/[0.06] bg-black/30 px-2 py-0.5 font-mono text-[11px] text-zinc-500"
                       >
                         {t}
                       </span>
@@ -347,7 +383,7 @@ export default function Home() {
                         href={p.repo}
                         target="_blank"
                         rel="noreferrer"
-                        className="font-mono text-[11px] text-emerald-500/80 hover:text-emerald-400"
+                        className="font-mono text-[11px] text-emerald-500/80 transition hover:text-emerald-400"
                       >
                         repo →
                       </a>
@@ -359,29 +395,29 @@ export default function Home() {
           </div>
         </section>
 
-        <section id="experience" className="border-b border-zinc-800/80">
+        <section id="experience" className="border-b border-white/[0.06]">
           <div className="mx-auto max-w-5xl px-5 py-16 sm:px-6 sm:py-20">
-            <p className="font-mono text-xs text-emerald-400/80">$ cat experience.log</p>
-            <h2 className="mt-1 text-xl font-semibold text-zinc-50">Experience</h2>
+            <p className="font-mono text-xs text-emerald-400/70">$ cat experience.log</p>
+            <h2 className="mt-1 text-2xl font-semibold tracking-tight text-white">Experience</h2>
 
             <ol className="mt-10">
               {experiences.map((e, i) => (
                 <li
                   key={e.company + e.period}
-                  className={`grid gap-1 border-t border-zinc-800 py-7 sm:grid-cols-[150px_1fr] sm:gap-8 ${
+                  className={`grid gap-2 border-t border-white/[0.06] py-8 sm:grid-cols-[160px_1fr] sm:gap-10 ${
                     i === experiences.length - 1 ? "border-b" : ""
                   }`}
                 >
                   <div>
                     <p className="font-mono text-xs text-zinc-500">{e.period}</p>
-                    <p className="mt-1 text-sm font-medium text-zinc-300">{e.company}</p>
+                    <p className="mt-1.5 text-sm font-medium text-zinc-300">{e.company}</p>
                   </div>
                   <div>
-                    <h3 className="text-base font-semibold text-zinc-100">{e.role}</h3>
-                    <ul className="mt-2 space-y-1.5">
+                    <h3 className="text-base font-semibold text-zinc-50">{e.role}</h3>
+                    <ul className="mt-3 space-y-2">
                       {e.points.map((pt) => (
-                        <li key={pt} className="flex gap-2 text-sm leading-6 text-zinc-400">
-                          <span className="mt-2 h-1 w-1 shrink-0 rounded-full bg-emerald-500/60" />
+                        <li key={pt} className="flex gap-2.5 text-sm leading-6 text-zinc-400">
+                          <span className="mt-2.5 h-1 w-1 shrink-0 rounded-full bg-emerald-400/70" />
                           {pt}
                         </li>
                       ))}
@@ -393,31 +429,31 @@ export default function Home() {
           </div>
         </section>
 
-        <section id="skills" className="border-b border-zinc-800/80">
+        <section id="skills" className="border-b border-white/[0.06]">
           <div className="mx-auto max-w-5xl px-5 py-16 sm:px-6 sm:py-20">
-            <p className="font-mono text-xs text-emerald-400/80">$ which tools</p>
-            <h2 className="mt-1 text-xl font-semibold text-zinc-50">Skills</h2>
-            <p className="mt-1 text-sm text-zinc-500">
+            <p className="font-mono text-xs text-emerald-400/70">$ which tools</p>
+            <h2 className="mt-1 text-2xl font-semibold tracking-tight text-white">Skills</h2>
+            <p className="mt-1.5 text-sm text-zinc-500">
               Tools used on real work or structured practice — not a wish list.
             </p>
             <div className="mt-8 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
               {skillGroups.map((g) => (
                 <div
                   key={g.title}
-                  className="rounded-lg border border-zinc-800 bg-[#111113] p-4"
+                  className="rounded-xl border border-white/[0.06] bg-white/[0.02] p-5 transition hover:border-emerald-500/15 hover:bg-white/[0.035]"
                 >
-                  <h3 className="font-mono text-xs text-emerald-400/80">{g.title}</h3>
-                  <p className="mt-2 text-sm leading-6 text-zinc-400">{g.items.join(" · ")}</p>
+                  <h3 className="font-mono text-xs tracking-wide text-emerald-400/80">{g.title}</h3>
+                  <p className="mt-2.5 text-sm leading-6 text-zinc-400">{g.items.join(" · ")}</p>
                 </div>
               ))}
             </div>
           </div>
         </section>
 
-        <section id="about" className="border-b border-zinc-800/80">
+        <section id="about" className="border-b border-white/[0.06]">
           <div className="mx-auto max-w-5xl px-5 py-16 sm:px-6 sm:py-20">
-            <p className="font-mono text-xs text-emerald-400/80">$ whoami</p>
-            <h2 className="mt-1 text-xl font-semibold text-zinc-50">About</h2>
+            <p className="font-mono text-xs text-emerald-400/70">$ whoami</p>
+            <h2 className="mt-1 text-2xl font-semibold tracking-tight text-white">About</h2>
             <div className="mt-6 max-w-2xl space-y-4 text-sm leading-7 text-zinc-400">
               <p>
                 B.E. Computer Science and Engineering from Mother Teresa College of Engineering and
@@ -430,9 +466,9 @@ export default function Home() {
               </p>
             </div>
             <div className="mt-8 grid gap-3 sm:grid-cols-2">
-              <div className="rounded-lg border border-zinc-800 bg-[#111113] p-5">
+              <div className="rounded-xl border border-white/[0.06] bg-white/[0.02] p-5">
                 <h3 className="font-mono text-xs text-emerald-400/80">education</h3>
-                <p className="mt-2 text-sm text-zinc-400">
+                <p className="mt-2.5 text-sm leading-6 text-zinc-400">
                   B.E. Computer Science and Engineering
                   <br />
                   Mother Teresa College of Engineering and Technology
@@ -440,9 +476,9 @@ export default function Home() {
                   2021 – 2025 · CGPA 7.6 · First Class
                 </p>
               </div>
-              <div className="rounded-lg border border-zinc-800 bg-[#111113] p-5">
+              <div className="rounded-xl border border-white/[0.06] bg-white/[0.02] p-5">
                 <h3 className="font-mono text-xs text-emerald-400/80">certifications</h3>
-                <ul className="mt-2 space-y-1 text-sm text-zinc-400">
+                <ul className="mt-2.5 space-y-1.5 text-sm text-zinc-400">
                   <li>AWS Cloud Practitioner — AWS Cloud Quest</li>
                   <li>Linux Essentials — Besant Technologies</li>
                 </ul>
@@ -453,57 +489,49 @@ export default function Home() {
 
         <section id="contact">
           <div className="mx-auto max-w-5xl px-5 py-16 sm:px-6 sm:py-20">
-            <p className="font-mono text-xs text-emerald-400/80">$ cat contact.txt</p>
-            <h2 className="mt-1 text-xl font-semibold text-zinc-50">Contact</h2>
+            <p className="font-mono text-xs text-emerald-400/70">$ cat contact.txt</p>
+            <h2 className="mt-1 text-2xl font-semibold tracking-tight text-white">Contact</h2>
             <p className="mt-3 max-w-xl text-sm leading-6 text-zinc-400">
               Open to full-time DevOps, Cloud, and Platform roles, and selective freelance work.
             </p>
-            <ul className="mt-8 space-y-3 font-mono text-sm">
-              <li>
-                <a
-                  href="mailto:abdulrahman6148@gmail.com"
-                  className="text-emerald-400 hover:underline"
-                >
-                  abdulrahman6148@gmail.com
-                </a>
-              </li>
-              <li>
-                <a
-                  href="https://github.com/rahman5828"
-                  target="_blank"
-                  rel="noreferrer"
-                  className="text-zinc-400 hover:text-emerald-400"
-                >
-                  github.com/rahman5828
-                </a>
-              </li>
-              <li>
-                <a
-                  href="https://www.linkedin.com/in/rahman-devops/"
-                  target="_blank"
-                  rel="noreferrer"
-                  className="text-zinc-400 hover:text-emerald-400"
-                >
-                  linkedin.com/in/rahman-devops
-                </a>
-              </li>
-              <li>
-                <a
-                  href="/resume.pdf"
-                  target="_blank"
-                  rel="noreferrer"
-                  className="text-zinc-400 hover:text-emerald-400"
-                >
-                  resume.pdf
-                </a>
-              </li>
-            </ul>
+            <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:gap-4">
+              <a
+                href="mailto:abdulrahman6148@gmail.com"
+                className="inline-flex items-center gap-2 rounded-lg border border-emerald-500/20 bg-emerald-500/5 px-4 py-2.5 font-mono text-sm text-emerald-400 transition hover:bg-emerald-500/10"
+              >
+                abdulrahman6148@gmail.com
+              </a>
+              <a
+                href="https://github.com/rahman5828"
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex items-center rounded-lg border border-white/10 px-4 py-2.5 font-mono text-sm text-zinc-400 transition hover:border-white/20 hover:text-zinc-200"
+              >
+                github ↗
+              </a>
+              <a
+                href="https://www.linkedin.com/in/rahman-devops/"
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex items-center rounded-lg border border-white/10 px-4 py-2.5 font-mono text-sm text-zinc-400 transition hover:border-white/20 hover:text-zinc-200"
+              >
+                linkedin ↗
+              </a>
+              <a
+                href="/resume.pdf"
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex items-center rounded-lg border border-white/10 px-4 py-2.5 font-mono text-sm text-zinc-400 transition hover:border-white/20 hover:text-zinc-200"
+              >
+                resume.pdf ↗
+              </a>
+            </div>
           </div>
         </section>
       </main>
 
-      <footer className="border-t border-zinc-800">
-        <div className="mx-auto flex max-w-5xl flex-col gap-1 px-5 py-6 font-mono text-[11px] text-zinc-600 sm:flex-row sm:justify-between sm:px-6">
+      <footer className="border-t border-white/[0.06]">
+        <div className="mx-auto flex max-w-5xl flex-col gap-1 px-5 py-6 font-mono text-[11px] text-zinc-600 sm:flex-row sm:items-center sm:justify-between sm:px-6">
           <span>abdul rahman v a · devops · cloud · platform</span>
           <span>built with next.js</span>
         </div>
